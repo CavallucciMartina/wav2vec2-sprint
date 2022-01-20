@@ -5,8 +5,8 @@ import warnings
 from datasets import load_dataset, load_metric
 from transformers import Wav2Vec2ForCTC, Wav2Vec2Processor
 
-LANG_ID = "pt"
-MODEL_ID = "jonatasgrosman/wav2vec2-large-xlsr-53-portuguese"
+LANG_ID = "it"
+MODEL_ID = "jonatasgrosman/wav2vec2-large-xlsr-53-italian"
 DEVICE = "cuda"
 
 CHARS_TO_IGNORE = [",", "?", "¿", ".", "!", "¡", ";", "；", ":", '""', "%", '"', "�", "ʿ", "·", "჻", "~", "՞",
@@ -38,22 +38,50 @@ def speech_file_to_array_fn(batch):
 
 test_dataset = test_dataset.map(speech_file_to_array_fn)
 
-# Preprocessing the datasets.
-# We need to read the audio files as arrays
-def evaluate(batch):
-	inputs = processor(batch["speech"], sampling_rate=16_000, return_tensors="pt", padding=True)
+ranges = {} # contains (count, tot_wer)
 
-	with torch.no_grad():
-		logits = model(inputs.input_values.to(DEVICE), attention_mask=inputs.attention_mask.to(DEVICE)).logits
+bands_len = 2 #2 second bands
 
-	pred_ids = torch.argmax(logits, dim=-1)
-	batch["pred_strings"] = processor.batch_decode(pred_ids)
-	return batch
 
-result = test_dataset.map(evaluate, batched=True, batch_size=8)
+for index, batch in enumerate(test_dataset):
+  
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        speech_array, sampling_rate = librosa.load(batch["path"], sr=16_000)
+    batch["speech"] = speech_array
+    batch["sentence"] = re.sub(chars_to_ignore_regex, "", batch["sentence"]).upper()
 
-predictions = [x.upper() for x in result["pred_strings"]]
-references = [x.upper() for x in result["sentence"]]
+    inputs = processor(batch["speech"], sampling_rate=16_000, return_tensors="pt", padding=True)
 
-print(f"WER: {wer.compute(predictions=predictions, references=references, chunk_size=1000) * 100}")
-print(f"CER: {cer.compute(predictions=predictions, references=references, chunk_size=1000) * 100}")
+    with torch.no_grad():
+        logits = model(inputs.input_values.to(DEVICE), attention_mask=inputs.attention_mask.to(DEVICE)).logits
+
+    pred_ids = torch.argmax(logits, dim=-1)
+    prediction = processor.batch_decode(pred_ids)
+    
+    
+    total_wer += wer.compute(predictions=[prediction[0].upper()], references=[batch["sentence"].upper()]) * 100
+    total_cer += cer.compute(predictions=[prediction[0].upper()], references=[batch["sentence"].upper()]) * 100
+
+    info = torchaudio.info(batch["path"])
+    duration_sec = info.num_frames / info.sample_rate
+
+    band = int(duration_sec / bands_len)
+
+    if band not in ranges:
+        ranges[band] = [1, wer_computed]
+    else:
+        ranges[band][0] += 1
+        ranges[band][1] += wer_computed
+
+total_cer /= len(test_dataset)
+total_wer /= len(test_dataset)
+
+with open(f"evaluation_bands_cmmv_jonatas.txt", "w") as f:
+    f.write("Common Voice Evaluation with jonatasgrosman/wav2vec2-large-xlsr-53-italian on test set \n")
+    for key in sorted(ranges.keys()):
+        mean_wer = ranges[key][1] / ranges[key][0]
+        f.write(f"[{int(key)*bands_len},{int(key)*bands_len+bands_len}) -> Count: {ranges[key][0]}, Wer: {mean_wer}\n")
+    f.write(f"WER: {total_wer}\n CER: {total_cer}\n")
+    f.write(f"Dataset Len: {len(test_dataset)}\n")
+
