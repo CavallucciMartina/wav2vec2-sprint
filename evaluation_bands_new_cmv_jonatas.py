@@ -94,10 +94,18 @@ for index, batch in enumerate(test_dataset):
 
     pred_ids = torch.argmax(logits, dim=-1)
     prediction = processor.batch_decode(pred_ids)
+
+    wer_computed = wer.compute(predictions=[prediction.upper()], references=[batch["sentence"].upper()]) * 100
+    cer_computed =jiwer.cer([prediction.upper()],[batch["sentence"].upper()]) * 100
+    total_wer += wer_computed
+    total_cer += cer_computed
+    
+    '''
     wer_computed = wer.compute(predictions=[prediction[0]], references=[batch["sentence"]]) * 100
     total_wer += wer_computed
     cer_computed= jiwer.cer(prediction, batch["sentence"])*100
     total_cer += cer_computed
+    '''
 
     info = torchaudio.info(batch["path"])
     duration_sec = info.num_frames / info.sample_rate
