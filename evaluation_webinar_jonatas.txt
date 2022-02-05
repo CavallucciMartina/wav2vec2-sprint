@@ -1,0 +1,75 @@
+
+ Webinar Evaluation with jonatasgrosman/wav2vec2-large-xlsr-53-italian on all data
+Female1
+	[4,6) -> Count: 15, Wer: 11.82, Cer: 3.21
+	[6,8) -> Count: 72, Wer: 13.37, Cer: 3.36
+	[8,10) -> Count: 1, Wer: 13.79, Cer: 6.83
+Female10
+	[4,6) -> Count: 26, Wer: 15.55, Cer: 4.92
+	[6,8) -> Count: 72, Wer: 14.42, Cer: 3.91
+	[8,10) -> Count: 3, Wer: 14.33, Cer: 4.07
+Female2
+	[4,6) -> Count: 26, Wer: 12.66, Cer: 3.37
+	[6,8) -> Count: 49, Wer: 15.51, Cer: 3.59
+Female3
+	[4,6) -> Count: 15, Wer: 18.66, Cer: 5.29
+	[6,8) -> Count: 19, Wer: 18.57, Cer: 5.43
+Female4
+	[4,6) -> Count: 10, Wer: 23.42, Cer: 6.19
+	[6,8) -> Count: 18, Wer: 14.53, Cer: 4.49
+Female5
+	[4,6) -> Count: 12, Wer: 20.25, Cer: 6.84
+	[6,8) -> Count: 25, Wer: 23.14, Cer: 6.11
+Female6
+	[4,6) -> Count: 29, Wer: 13.0, Cer: 4.73
+	[6,8) -> Count: 55, Wer: 19.32, Cer: 5.05
+Female7
+	[4,6) -> Count: 34, Wer: 20.47, Cer: 5.88
+	[6,8) -> Count: 55, Wer: 16.95, Cer: 5.23
+Female8
+	[4,6) -> Count: 32, Wer: 15.85, Cer: 4.19
+	[6,8) -> Count: 64, Wer: 17.26, Cer: 4.41
+	[8,10) -> Count: 1, Wer: 13.33, Cer: 3.23
+Female9
+	[4,6) -> Count: 47, Wer: 14.75, Cer: 3.82
+	[6,8) -> Count: 60, Wer: 14.23, Cer: 2.92
+Male1
+	[4,6) -> Count: 15, Wer: 17.16, Cer: 6.25
+	[6,8) -> Count: 57, Wer: 17.84, Cer: 4.2
+	[8,10) -> Count: 4, Wer: 7.97, Cer: 1.29
+Male10
+	[4,6) -> Count: 56, Wer: 12.94, Cer: 3.07
+	[6,8) -> Count: 43, Wer: 14.74, Cer: 3.38
+Male2
+	[4,6) -> Count: 48, Wer: 13.75, Cer: 3.21
+	[6,8) -> Count: 53, Wer: 13.32, Cer: 3.34
+Male3
+	[4,6) -> Count: 34, Wer: 16.99, Cer: 3.87
+	[6,8) -> Count: 65, Wer: 15.9, Cer: 4.49
+	[8,10) -> Count: 1, Wer: 31.25, Cer: 19.33
+Male4
+	[4,6) -> Count: 30, Wer: 20.92, Cer: 4.98
+	[6,8) -> Count: 34, Wer: 20.21, Cer: 6.08
+Male5
+	[4,6) -> Count: 50, Wer: 20.62, Cer: 5.19
+	[6,8) -> Count: 50, Wer: 22.09, Cer: 5.31
+Male6
+	[4,6) -> Count: 28, Wer: 18.13, Cer: 4.88
+	[6,8) -> Count: 71, Wer: 18.53, Cer: 5.21
+	[8,10) -> Count: 1, Wer: 15.79, Cer: 3.15
+Male7
+	[4,6) -> Count: 15, Wer: 16.61, Cer: 4.99
+	[6,8) -> Count: 16, Wer: 10.19, Cer: 2.65
+Male8
+	[4,6) -> Count: 48, Wer: 25.6, Cer: 7.59
+	[6,8) -> Count: 49, Wer: 24.28, Cer: 6.89
+Male9
+	[4,6) -> Count: 37, Wer: 19.15, Cer: 5.51
+	[6,8) -> Count: 50, Wer: 16.24, Cer: 4.66
+
+Total Dataset
+	[4,6) -> Count: 607, Wer: 17.32, Cer: 4.74
+	[6,8) -> Count: 977, Wer: 16.96, Cer: 4.47
+	[8,10) -> Count: 11, Wer: 13.55, Cer: 4.54
+Total WER: 17, Total CER: 5
+Dataset Len: N. 1595, Sec. 9808.97872250563, N° Audio Mean: 79.75, Stdev N° Audio: 26.48, Sec. Mean: 6.15, Stdev Sec.: 0.62

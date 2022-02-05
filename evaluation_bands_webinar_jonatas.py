@@ -17,7 +17,7 @@ import jiwer
 import re
 from statistics import stdev, mean
 import time
-
+import os
 main_folder = "../audio_voices/"
 
 file_transcripts = f"sentences.txt"
@@ -81,7 +81,8 @@ model.to(DEVICE)
 
 total_len = 0
 total_sec = 0
-
+total_wer=0
+total_cer=0
 bands_len = 2
 
 standard_dev_audio = []
@@ -117,7 +118,7 @@ for speaker in speakers:
         inputs = processor(batch["speech"], sampling_rate=16_000, return_tensors="pt", padding=True)
 
         with torch.no_grad():
-            logits = model(inputs.input_values, attention_mask=inputs.attention_mask).logits
+            logits = model(inputs.input_values.to(DEVICE), attention_mask=inputs.attention_mask.to(DEVICE)).logits
 
         pred_ids = torch.argmax(logits, dim=-1)
         prediction = processor.batch_decode(pred_ids)
@@ -127,7 +128,7 @@ for speaker in speakers:
         #print(f"PRED: {prediction.upper()}\nREF: {batch['sentence'].upper()}")
 
         wer_computed = wer.compute(predictions=[prediction.upper()], references=[batch["sentence"].upper()]) * 100
-        cer_computed = cer.compute(predictions=[prediction.upper()], references=[batch["sentence"].upper()]) * 100
+        cer_computed =jiwer.cer([prediction.upper()],[batch["sentence"].upper()]) * 100
 
         info = torchaudio.info(f"{path_to_audio_dir}{batch['path']}")
         duration_sec = info.num_frames / info.sample_rate
